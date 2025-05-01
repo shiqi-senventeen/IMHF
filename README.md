@@ -1,0 +1,3 @@
+# Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction
+This repository contains the complete code and all required CSV files for our paper "Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction." The project integrates molecular graphs, SMILES strings, and molecular images through a multimodal fusion framework combined with meta-learning to improve molecular property prediction. Due to storage limitations, only a small sample of molecular images is included in this repository as examples. All other data and code are provided to ensure full reproducibility of the experiments.
+
