@@ -94,6 +94,10 @@ Replace `bace` with the desired dataset name. Supported dataset options include:
 * `tox21`
 * *(other datasets depending on your setup)*
 
+Then：
+```bash
+python finetune.py
+```
 
 Evaluation metrics such as accuracy, ROC-AUC, F1 score, and others will be printed to the console and saved for later review.
 
