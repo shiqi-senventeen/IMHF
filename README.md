@@ -8,7 +8,7 @@ We propose a multimodal hierarchical fusion framework that integrates molecular 
 
 > ⚠️ Due to storage constraints, only a subset of molecular images is included here. The complete dataset, including molecular images, SMILES files, and pretrained weights, can be downloaded via the following links:
 
-- **Baidu Netdisk**: [dataset.7z (extraction code: 8qfp)](https://pan.baidu.com/s/1pbiOSKRX3QwnWk5qNJC1pA?pwd=8qfp)  
+- **Baidu Netdisk**: [IMHF.zip (extraction code: 8qfp)](https://pan.baidu.com/s/1pbiOSKRX3QwnWk5qNJC1pA?pwd=8qfp)  
 - **Google Drive**: [Download Link](https://drive.google.com/file/d/1uuCCjxb9eG9-uTKsxl02--fgUL1iA8NF/view?usp=sharing)
 
 ---
