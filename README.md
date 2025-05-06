@@ -66,7 +66,7 @@ pip install tensorboard==1.1
 
 ### Step 1: Prepare Dataset
 
-Download and extract the dataset. Place all files according to the project’s directory structure. Make sure datasets are inside the `datasets/` folder and follow the correct hierarchy.
+Download and extract the dataset and checkpoints. Place all files according to the project’s directory structure. Make sure datasets are inside the `datasets/` folder and follow the correct hierarchy.
 
 ---
 
@@ -124,8 +124,6 @@ python finetune.py
 ```
 
 Results including ROC-AUC, accuracy, and F1 score will be printed and saved.
-
-> Note: Downstream datasets are disjoint from meta-training datasets.
 
 ---
 
