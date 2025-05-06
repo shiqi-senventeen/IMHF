@@ -115,6 +115,7 @@ def main():
 
     # Initialize the model
     model = CNNTransformer(n_channels=3, imgsize=224)
+    model.load_state_dict(torch.load("./checkpoints/CNN/cnn.pth"))
     model.to(device=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 
     # Define loss function
