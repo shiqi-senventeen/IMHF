@@ -1,12 +1,99 @@
+
 # Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction
 
-This repository contains the complete code and necessary CSV files for our paper *"Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction."* Our approach integrates molecular graphs and images using a multimodal hierarchical fusion framework combined with meta-learning to improve molecular property prediction performance.
+This repository contains the full code and partial sample data for our paper:  
+**"Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction."**
 
-Due to storage constraints, only a small sample of molecular images is included here. However, all remaining molecular images, SMILES datasets, and pretrained model weights are available for download via the following cloud storage links:
+We propose a multimodal hierarchical fusion framework that integrates molecular graphs and images, enhanced with meta-learning to improve molecular property prediction performance.
 
-- **Baidu Netdisk**: [dataset.7z (提取码: 8iks)](https://pan.baidu.com/s/1Es5I-YRuiicujzVtUbpIXA?pwd=8iks)  
+> ⚠️ Due to storage constraints, only a subset of molecular images is included here. The complete dataset, including molecular images, SMILES files, and pretrained weights, can be downloaded via the following links:
+
+- **Baidu Netdisk**: [dataset.7z (extraction code: 8iks)](https://pan.baidu.com/s/1Es5I-YRuiicujzVtUbpIXA?pwd=8iks)  
 - **Google Drive**: [Download Link](https://drive.google.com/file/d/1RcgFieKUMTJ31is0x8uc7cUqGEbsUSqJ/view?usp=sharing)
 
-All code and data are provided to ensure full reproducibility of the experiments. Please refer to the documentation for usage instructions and additional details.
+---
 
+## 📁 Project Structure
+
+```
+
+.
+├── Module/                # Model components
+├── Reptile/               # Meta-learning (Reptile algorithm)
+├── checkpoints/           # Folder for pretrained or saved model weights
+├── datasets/              # Data loading and processing
+├── utils/                 # Utility scripts
+├── cnn\_pretrain.py        # CNN pretraining script
+├── config.py              # Global configuration
+├── environment.yaml       # Conda environment definition
+├── finetune.py            # Fine-tuning on downstream tasks
+├── meta\_train.py          # Meta-learning training script
+└── README.md              # Project documentation
+
+````
+
+---
+
+## ⚙️ Environment Setup
+
+To create the required environment, run:
+
+```bash
+conda env create -f environment.yaml
+conda activate multimodal-molecule
+````
+
+---
+
+## 🚀 Usage Instructions
+
+### Step 1: Pretrain the CNN (Optional)
+
+Pretrain the image feature extractor (CNN) using:
+
+```bash
+python cnn_pretrain.py
+```
+
+Alternatively, use the provided pretrained weight:
+
+```
+./checkpoints/CNN/cnn.pth
+```
+
+---
+
+### Step 2: Meta-Learning Pretraining
+
+Train the base model using the meta-learning framework:
+
+```bash
+python meta_train.py
+```
+
+Alternatively, load the pretrained meta-model from:
+
+```
+./checkpoints/pretain.pth
+```
+
+---
+
+### Step 3: Fine-Tune on Downstream Tasks
+
+Run fine-tuning on a downstream molecular property prediction task:
+
+```bash
+python finetune.py
+```
+
+> **Note**: To ensure evaluation integrity, the downstream training and test sets do **not** overlap with those used during meta-learning pretraining.
+
+Final prediction results will be printed and saved.
+
+---
+
+## 📫 Contact
+
+For questions, suggestions, or issues, please open an [issue](https://github.com/your-repo/issues) or contact the authors.
 
