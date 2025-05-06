@@ -40,7 +40,7 @@ To create the required environment, run:
 
 ```bash
 conda env create -f environment.yaml
-conda activate multimodal-molecule
+conda activate mols
 ````
 
 ---
