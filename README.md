@@ -1,3 +1,4 @@
+
 # Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction
 
 This repository contains the full code and partial sample data for our paper:
@@ -17,16 +18,16 @@ We propose a multimodal hierarchical fusion framework that integrates molecular 
 ```
 .
 ├── Module/                # Model components
-├── Reptile/              # Meta-learning (Reptile algorithm)
-├── checkpoints/          # Folder for pretrained or saved model weights
-├── datasets/             # Data loading and processing
-├── utils/                # Utility scripts
-├── cnn_pretrain.py       # CNN pretraining script
-├── config.py             # Global configuration
-├── environment.yaml      # Conda environment definition
-├── finetune.py           # Fine-tuning on downstream tasks
-├── meta_train.py         # Meta-learning training script
-└── README.md             # Project documentation
+├── Reptile/               # Meta-learning (Reptile algorithm)
+├── checkpoints/           # Folder for pretrained or saved model weights
+├── datasets/              # Data loading and processing
+├── utils/                 # Utility scripts
+├── cnn_pretrain.py        # CNN pretraining script
+├── config.py              # Global configuration
+├── environment.yaml       # Conda environment definition
+├── finetune.py            # Fine-tuning on downstream tasks
+├── meta_train.py          # Meta-learning training script
+└── README.md              # Project documentation
 ```
 
 ---
@@ -65,7 +66,7 @@ pip install tensorboard==1.1
 
 ### Step 1: Prepare Dataset
 
-Download and extract the dataset and the checkpoints. Place all files according to the project’s directory structure. Make sure datasets are inside the `datasets/` folder and follow the correct hierarchy.
+Download and extract the dataset. Place all files according to the project’s directory structure. Make sure datasets are inside the `datasets/` folder and follow the correct hierarchy.
 
 ---
 
@@ -169,12 +170,66 @@ The `config.py` file contains all hyperparameters. Here's how to adjust them for
 | `en_node_dim`   | Initial node feature dimension | 31      |
 | `en_edge_dim`   | Initial edge feature dimension | 6       |
 
-### ⚠️ Constraints
+---
 
-| Parameter   | Description                       | Default |
-| ----------- | --------------------------------- | ------- |
-| `Max_atoms` | Max number of atoms per molecule  | 60      |
-| `Max_motif` | Max number of motifs per molecule | 20      |
+## 🧪 Implementation Details
+
+Our training process consists of two main stages: **meta-learning pretraining** and **fine-tuning on downstream property prediction tasks**.
+
+### 🔁 Meta-Learning Pretraining
+
+We adopt the Reptile meta-learning algorithm. This phase helps the model learn transferable molecular representations from auxiliary datasets.
+
+| Parameter      | Value | Description                    |
+| -------------- | ----- | ------------------------------ |
+| `meta_batchsz` | 2     | Number of tasks per meta-batch |
+| `meta_lr`      | 0.001 | Outer loop learning rate       |
+| `num_updates`  | 5     | Number of inner-loop updates   |
+| `meta_epoch`   | 10    | Total meta-training epochs     |
+
+Run the training using:
+
+```bash
+python meta_train.py
+```
+
+Ensure the following flag is set in `config.py`:
+
+```python
+ismetatrain = True
+```
+
+### 🎯 Fine-Tuning on Downstream Tasks
+
+After meta-training, we fine-tune the model on disjoint benchmark datasets such as BBBP, BACE, Tox21, etc.
+
+| Parameter     | Value  | Description                  |
+| ------------- | ------ | ---------------------------- |
+| `epoch`       | 100    | Total fine-tuning epochs     |
+| `random_seed` | 68     | Seed for reproducibility     |
+| `task_name`   | "BBBP" | Target task name             |
+| `ismetatrain` | False  | Switches to fine-tuning mode |
+
+Run fine-tuning with:
+
+```bash
+python finetune.py
+```
+
+### 🧩 Model Architecture
+
+Our IMHF framework integrates multimodal information from both molecular graphs and images. The architecture uses a hierarchical fusion mechanism with the following major modules:
+
+| Component       | Value | Description                          |
+| --------------- | ----- | ------------------------------------ |
+| `gnn_num_layer` | 3     | Number of GNN layers                 |
+| `node_dim`      | 256   | Node hidden dimension                |
+| `edge_dim`      | 64    | Edge hidden dimension                |
+| `en_node_dim`   | 31    | Initial node feature dimension       |
+| `en_edge_dim`   | 6     | Initial edge feature dimension       |
+| `p_dropout`     | 0.2   | Dropout rate                         |
+| `imgsize`       | 224   | Input molecular image size           |
+| `img_dim`       | 768   | Image feature dimension (CNN output) |
 
 ---
 
