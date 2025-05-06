@@ -52,5 +52,5 @@ class args:
     ismetatrain = True  # Whether to use meta-training (True) or standard training (False)
 
     # Dataset selection
-    task_name = "tox21"  # Dataset name: options include BBBP, tox21, HIV, bace, clintox
+    task_name = "BBBP"  # Dataset name: options include BBBP, tox21, HIV, bace, clintox
     # Note: BACE, BBBP, Tox21 have been implemented and tested
