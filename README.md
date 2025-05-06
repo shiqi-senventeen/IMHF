@@ -77,23 +77,31 @@ Alternatively, load the pretrained meta-model from:
 ./checkpoints/pretain.pth
 ```
 
----
 
-### Step 3: Fine-Tune on Downstream Tasks
+### Step 3: Fine-Tune on Downstream Molecular Property Prediction Tasks
 
-Run fine-tuning on a downstream molecular property prediction task:
+To fine-tune the model on a specific molecular property prediction dataset (e.g., **BACE**, **BBBP**, **SIDER**, **Tox21**), edit the following parameters in `config.py`:
 
-```bash
-python finetune.py
-```
+```python
+# config.py
+````
 
-> **Note**: To ensure evaluation integrity, the downstream training and test sets do **not** overlap with those used during meta-learning pretraining.
+Replace `bace` with the desired dataset name. Supported dataset options include:
 
-Final prediction results will be printed and saved.
+* `bace`
+* `bbbp`
+* `clintox`
+* `tox21`
+* *(other datasets depending on your setup)*
 
----
+
+Evaluation metrics such as accuracy, ROC-AUC, F1 score, and others will be printed to the console and saved for later review.
+
+**Note**: All downstream datasets are disjoint from the meta-training set to ensure fair evaluation.
+
+
 
 ## 📫 Contact
 
-For questions, suggestions, or issues, please open an [issue](https://github.com/your-repo/issues) or contact the authors.
+For questions, suggestions, or issues, please open an issue or contact the authors.
 
