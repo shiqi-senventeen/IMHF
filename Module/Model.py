@@ -6,6 +6,83 @@ from Module.AttentiveLayers import CNNTransformer
 from Module.GNN import GraphPropagationAttention
 from Module.datautils import args
 
+class BAMBlock(nn.Module):
+    """
+    Bottleneck Attention Module (BAM) for feature fusion.
+    Implements channel and spatial attention to enhance feature representations.
+    """
+    def __init__(self, in_features, reduction_ratio=16, dilation_conv_kernel=3):
+        super(BAMBlock, self).__init__()
+        self.in_features = in_features
+        self.reduction_ratio = reduction_ratio
+        self.dilation_conv_kernel = dilation_conv_kernel
+        
+        # Channel attention branch
+        self.channel_avg_pool = nn.AdaptiveAvgPool1d(1)
+        self.channel_max_pool = nn.AdaptiveMaxPool1d(1)
+        
+        self.channel_fc = nn.Sequential(
+            nn.Linear(in_features, in_features // reduction_ratio, bias=False),
+            nn.ReLU(inplace=True),
+            nn.Linear(in_features // reduction_ratio, in_features, bias=False)
+        )
+        
+        # Spatial attention branch
+        self.spatial_conv1 = nn.Conv1d(in_features, in_features // reduction_ratio, kernel_size=1)
+        self.spatial_bn1 = nn.BatchNorm1d(in_features // reduction_ratio)
+        self.spatial_relu = nn.ReLU(inplace=True)
+        
+        # Dilated convolution for larger receptive field
+        self.spatial_conv2 = nn.Conv1d(
+            in_features // reduction_ratio, 
+            in_features // reduction_ratio,
+            kernel_size=dilation_conv_kernel,
+            padding=dilation_conv_kernel//2,
+            dilation=1
+        )
+        self.spatial_bn2 = nn.BatchNorm1d(in_features // reduction_ratio)
+        
+        self.spatial_conv3 = nn.Conv1d(in_features // reduction_ratio, 1, kernel_size=1)
+        
+        # Sigmoid for attention weights
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        """
+        Forward pass through the BAM block.
+        
+        Args:
+            x (torch.Tensor): Input features [batch_size, feature_dim]
+            
+        Returns:
+            torch.Tensor: Attention-enhanced features
+        """
+        batch_size = x.size(0)
+        
+        # Channel attention
+        # Reshape for channel attention
+        x_chan = x.unsqueeze(-1)  # [batch_size, feature_dim, 1]
+        
+        avg_pool = self.channel_avg_pool(x_chan).view(batch_size, -1)
+        max_pool = self.channel_max_pool(x_chan).view(batch_size, -1)
+        
+        channel_att = self.sigmoid(self.channel_fc(avg_pool) + self.channel_fc(max_pool))
+        channel_att = channel_att.unsqueeze(-1)  # [batch_size, feature_dim, 1]
+        
+        # Spatial attention
+        x_spatial = x.unsqueeze(-1)  # [batch_size, feature_dim, 1]
+        spatial = self.spatial_relu(self.spatial_bn1(self.spatial_conv1(x_spatial)))
+        spatial = self.spatial_relu(self.spatial_bn2(self.spatial_conv2(spatial)))
+        spatial_att = self.sigmoid(self.spatial_conv3(spatial))  # [batch_size, 1, 1]
+        
+        # Combine channel and spatial attention
+        att = 1 + self.sigmoid(channel_att * spatial_att.transpose(1, 2))  # [batch_size, feature_dim, 1]
+        
+        # Apply attention to input features
+        x_att = x * att.squeeze(-1)
+        
+        return x_att
+
 
 class UMPredict(nn.Module):
     """
