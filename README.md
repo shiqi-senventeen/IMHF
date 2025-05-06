@@ -1,6 +1,7 @@
 
 # Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction
 
+![Overview](overview.png)
 This repository contains the full code and partial sample data for our paper:
 **"Integrated Multimodal Hierarchical Fusion and Meta-Learning for Enhanced Molecular Property Prediction."**
 
